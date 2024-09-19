@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Quản Lý Phản Ánh, Kiến Nghị</title>
+        <link rel="stylesheet" href="QlyPhanAnh.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Quản Lý Phản Ánh, Kiến Nghị</h1>
+        </header>
+
+        <div class="container">
+            <button
+                onclick="document.getElementById('form-modal').style.display='block'"
+            >
+                Thêm Mới
+            </button>
+
+            <div
+                id="form-modal"
+                style="
+                    display: none;
+                    padding: 20px;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    position: absolute;
+                    z-index: 1;
+                    top: 50px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                "
+            >
+                <h2>Thêm Phản Ánh, Kiến Nghị</h2>
+                <form>
+                    <input type="text" placeholder="Người Phản Ánh" required />
+                    <textarea placeholder="Nội Dung" required></textarea>
+                    <input type="date" required />
+                    <select required>
+                        <option value="">Chọn Phân Loại</option>
+                        <option value="co-so-ha-tang">Cơ sở hạ tầng</option>
+                        <option value="dien">Điện</option>
+                        <option value="nuoc">Nước</option>
+                        <option value="an-ninh">An ninh</option>
+                        <option value="khac">Khác</option>
+                    </select>
+                    <button type="submit">Ghi Nhận</button>
+                    <button
+                        type="button"
+                        onclick="document.getElementById('form-modal').style.display='none'"
+                    >
+                        Đóng
+                    </button>
+                </form>
+            </div>
+
+            <h2>Danh Sách Phản Ánh, Kiến Nghị</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Người Phản Ánh</th>
+                        <th>Nội Dung</th>
+                        <th>Ngày Phản Ánh</th>
+                        <th>Phân Loại</th>
+                        <th>Trạng Thái</th>
+                        <th>Chi Tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nguyễn Văn A</td>
+                        <td>Nước sinh hoạt yếu</td>
+                        <td>01/09/2024</td>
+                        <td>Cơ sở hạ tầng</td>
+                        <td>Mới ghi nhận</td>
+                        <td><button>Xem</button></td>
+                    </tr>
+                    <tr>
+                        <td>Trần Thị B</td>
+                        <td>Mất điện</td>
+                        <td>02/09/2024</td>
+                        <td>Điện</td>
+                        <td>Chưa giải quyết</td>
+                        <td><button>Xem</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
