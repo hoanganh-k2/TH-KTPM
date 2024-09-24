@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #007bff;
+    padding: 8px;
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff;
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+}
+
+footer {
+    background-color: #007bff;
+    color: white;
+}
