@@ -9,6 +9,7 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="phananh.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <!-- Navbar -->
@@ -26,7 +27,6 @@
         <!-- Main Content -->
         <div class="container my-5">
             <h3>Quản Lý Phản Ánh, Kiến Nghị</h3>
-            <!-- Button trigger modal -->
             <button
                 type="button"
                 class="btn btn-primary mb-3"
@@ -48,38 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nước sinh hoạt yếu</td>
-                        <td>01/09/2024</td>
-                        <td>Cơ sở hạ tầng</td>
-                        <td>Mới ghi nhận</td>
-                        <td>
-                            <button
-                                class="btn btn-info btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#phanAnhModal"
-                            >
-                                Xem
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Trần Thị B</td>
-                        <td>Mất điện</td>
-                        <td>02/09/2024</td>
-                        <td>Điện</td>
-                        <td>Chưa giải quyết</td>
-                        <td>
-                            <button
-                                class="btn btn-info btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#phanAnhModal"
-                            >
-                                Xem
-                            </button>
-                        </td>
-                    </tr>
+                    <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -106,7 +75,7 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form id="phanAnhForm">
                             <div class="mb-3">
                                 <label for="nguoiPhanAnh" class="form-label"
                                     >Người Phản Ánh</label
@@ -116,6 +85,7 @@
                                     class="form-control"
                                     id="nguoiPhanAnh"
                                     placeholder="Nhập tên người phản ánh"
+                                    required
                                 />
                             </div>
                             <div class="mb-3">
@@ -127,6 +97,7 @@
                                     id="noiDungPhanAnh"
                                     rows="3"
                                     placeholder="Nhập nội dung phản ánh"
+                                    required
                                 ></textarea>
                             </div>
                             <div class="mb-3">
@@ -137,14 +108,18 @@
                                     type="date"
                                     class="form-control"
                                     id="ngayPhanAnh"
-                                    value="2024-09-24"
+                                    required
                                 />
                             </div>
                             <div class="mb-3">
                                 <label for="phanLoai" class="form-label"
                                     >Phân Loại</label
                                 >
-                                <select class="form-select" id="phanLoai">
+                                <select
+                                    class="form-select"
+                                    id="phanLoai"
+                                    required
+                                >
                                     <option value="Cơ sở hạ tầng">
                                         Cơ sở hạ tầng
                                     </option>
@@ -158,7 +133,11 @@
                                 <label for="trangThai" class="form-label"
                                     >Trạng Thái</label
                                 >
-                                <select class="form-select" id="trangThai">
+                                <select
+                                    class="form-select"
+                                    id="trangThai"
+                                    required
+                                >
                                     <option value="Mới ghi nhận">
                                         Mới ghi nhận
                                     </option>
@@ -191,7 +170,11 @@
                         >
                             Đóng
                         </button>
-                        <button type="button" class="btn btn-primary">
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="savePhanAnh"
+                        >
                             Lưu Thay Đổi
                         </button>
                     </div>
@@ -203,6 +186,74 @@
         <footer class="text-center py-3">
             <p>© 2023 Quản Lý Chung Cư. All rights reserved.</p>
         </footer>
+
+        <script>
+            $(document).ready(function () {
+                // Hàm để tải danh sách phản ánh
+                function loadPhanAnhs() {
+                    fetch("http://localhost:3000/api/phananh")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const tbody = $("table tbody");
+                            tbody.empty(); // Xóa nội dung cũ
+                            data.forEach((phanAnh) => {
+                                const row = `<tr>
+                                <td>${phanAnh.nguoiPhanAnh}</td>
+                                <td>${phanAnh.noiDung}</td>
+                                <td>${new Date(
+                                    phanAnh.ngayPhanAnh
+                                ).toLocaleDateString()}</td>
+                                <td>${phanAnh.phanLoai}</td>
+                                <td>${phanAnh.trangThai}</td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#phanAnhModal" onclick="editPhanAnh('${
+                                        phanAnh._id
+                                    }')">Xem</button>
+                                </td>
+                            </tr>`;
+                                tbody.append(row);
+                            });
+                        })
+                        .catch((error) => console.error("Error:", error));
+                }
+
+                loadPhanAnhs(); // Tải danh sách phản ánh khi trang được tải
+
+                // Cập nhật hoặc thêm phản ánh
+                $("#savePhanAnh").on("click", function () {
+                    const phanAnhData = {
+                        nguoiPhanAnh: $("#nguoiPhanAnh").val(),
+                        noiDung: $("#noiDungPhanAnh").val(),
+                        ngayPhanAnh: $("#ngayPhanAnh").val(),
+                        phanLoai: $("#phanLoai").val(),
+                        trangThai: $("#trangThai").val(),
+                        phanHoi: $("#phanHoi").val(),
+                    };
+
+                    fetch("http://localhost:3000/api/phananh", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(phanAnhData),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            alert("Phản ánh đã được thêm!");
+                            loadPhanAnhs(); // Tải lại danh sách sau khi thêm
+                            $("#phanAnhModal").modal("hide"); // Đóng modal
+                            $("#phanAnhForm")[0].reset(); // Reset biểu mẫu
+                        })
+                        .catch((error) => console.error("Error:", error));
+                });
+            });
+
+            // Hàm để chỉnh sửa phản ánh
+            function editPhanAnh(id) {
+                // Logic để chỉnh sửa phản ánh
+                alert("Chức năng chỉnh sửa chưa được triển khai.");
+            }
+        </script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     </body>

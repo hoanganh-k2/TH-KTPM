@@ -7,8 +7,13 @@ body {
 }
 .navbar-brand,
 .nav-link {
-    color: white !important;
+    color: white;
 }
+
+.nav-item:hover .nav-link {
+    color: black;
+}
+
 .dashboard-box {
     background-color: white;
     border-radius: 10px;
@@ -17,6 +22,18 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
+
+.col-md-3 .dashboard-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-md-3 .dashboard-box i {
+    margin-right: 20px;
+    font-size: 30px;
+}
+
 .resident-table th,
 .resident-table td {
     padding: 10px;
